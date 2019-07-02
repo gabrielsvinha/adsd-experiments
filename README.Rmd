@@ -1,0 +1,48 @@
+---
+title: "plot"
+author: "Gabriel Vinha"
+date: "7/1/2019"
+output: rmarkdown::github_document
+---
+```{r}
+library(tidyverse)
+library(knitr)
+library(here)
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+```{r}
+df <- read_csv("results/2/raw-convert.csv")
+df$acc[df$acc == FALSE] <- "Regular Encoding/Decoding"
+df$acc[df$acc == TRUE] <- "NVidia GeForce Encoding/Decoding"
+df$size[df$size == 10] <- "10 MB"
+df$size[df$size == 30] <- "30 MB"
+```
+
+```{r}
+subset(df, output == 'mp4') %>%
+  ggplot(aes(x = size, y = seconds, fill=acc)) +
+  geom_bar(stat='identity', position='dodge') +
+  theme_bw() +
+  scale_colour_brewer(palette="Set1") +
+  theme(legend.title=element_blank(), legend.position="top") +
+  xlab("Input size") +
+  ylab("Conversion time") +
+  ggtitle("Conversion time for MP4 output")  
+```
+
+```{r}
+subset(df, output == 'flv') %>%
+  ggplot(aes(x = size, y = seconds, fill=acc)) +
+  geom_bar(stat='identity', position='dodge') +
+  theme_bw() +
+  scale_colour_brewer(palette="Set1") +
+  theme(legend.title=element_blank(), legend.position="top") +
+  xlab("Input size") +
+  ylab("Conversion time") +
+  ggtitle("Conversion time for FLV output")
+```
+
+
+
