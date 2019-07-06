@@ -7,13 +7,15 @@ declare -a sizearr=(10 30)
 dir="2"
 mkdir -p results/$dir
 mkdir -p output/
-
+mkdir -p logs/
+echo "output,size,acc,seconds,cpu,mem" >> results/2/raw-convert.csv
 for times in 1 2 3 4 5; do
     for size in "${sizearr[@]}"; do
         echo $(date '+%y-%m-%d %H:%M:%S.%6N') >> logs/$size-$times-time.txt
-	time ffmpeg -y -hwaccel cuvid -c:v h264_cuvid -i input/SampleVideo_1280x720_${size}mb.flv -c:v h264_nvenc output/tmp.mp4
-	echo $(date '+%y-%m-%d %H:%M:%S.%6N') >> logs/$size-$times-time.txt
-	python parse.py mp4 $size TRUE $times
+	    time ffmpeg -y -hwaccel cuvid -c:v h264_cuvid -i input/SampleVideo_1280x720_${size}mb.flv -c:v h264_nvenc output/tmp.mp4
+	    echo $(date '+%y-%m-%d %H:%M:%S.%6N') >> logs/$size-$times-time.txt
+	    python parse.py mp4 $size TRUE $times
+        sleep 5
     done
     rm -rf logs/*
 done
